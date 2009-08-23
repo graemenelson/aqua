@@ -60,7 +60,12 @@ module Aqua
           #
           # @api public
           def save
-            
+            begin
+              create_or_update
+            rescue
+              puts $!
+              return false
+            end
           end
           
           # Saves an Aqua::Storage to the Aqua::Store::FileStore, will raise an exceptions that may occur.
@@ -70,12 +75,27 @@ module Aqua
           #
           # @api public
           def commit
-            
+            create_or_update
           end
           alias :save! :commit
           
-          # TODO: we need to handle update/create
-          # TODO: on create we need to assign a unique id -- maybe look at how stone does it.
+          # Returns true if the record hasn't been saved.
+          # @return [Boolean] true if the record hasn't been saved to the file system.
+          def new_record?
+            # TODO: we probably can only check to see that created_at has been set, and it should be set after
+            # the record has been saved.
+            self[:created_at].nil?
+          end
+          
+          
+          private
+          
+          # responsible for creating or updating the record based on whether the
+          # record is a new record or not.
+          # TODO: add call backs, probably could do so through another module
+          def create_or_update
+            MetaData.create_or_update( self )
+          end
           
         end
         

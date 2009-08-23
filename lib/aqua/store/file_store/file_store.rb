@@ -1,7 +1,5 @@
 require File.dirname( __FILE__ ) + "/storage_methods" unless defined?( Aqua::Store::FileStore::StorageMethods )
 require File.dirname( __FILE__ ) + "/meta_data" unless defined?( Aqua::Store::FileStore::MetaData )
-#require File.dirname( __FILE__ ) + "/file_system/adapter/yaml_adapter"
-#require File.dirname( __FILE__ ) + "/file_system/adapter/pstore_adapter"
 
 module Aqua
   module Store
@@ -45,6 +43,7 @@ module Aqua
       def self.clear_settings
         @adapter    = nil
         @directory  = nil
+        @metadata   = nil
         #TODO: if any modules get mixed in we need to remove them too!
       end
       
@@ -123,7 +122,7 @@ module Aqua
       # sure you have the correct adapter and directory set.  the suggested route is to use FileStore.init
       # where you can specify the adapter, directory and the meta data gets loaded.
       def self.load_metadata
-        @meta_data = MetaData.init( self.adapter, self.directory )
+        @metadata = MetaData.init( self.adapter, self.directory )
       end
       
     end

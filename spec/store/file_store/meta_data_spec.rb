@@ -82,6 +82,12 @@ describe MetaData do
       describe 'with a datastore directory with "users" resource' do
         
         before( :each ) do
+          unless defined?( User ) # if you run the specs as a suite, a user class is alredy defined.
+            class User
+            end
+          end
+          @user = User.new
+          
           @users_dir = "#{@directory}/users"
           FileUtils.mkdir_p( @users_dir )
           
@@ -122,7 +128,15 @@ describe MetaData do
             @user_meta_data.next_id.should == 3
           end
           
-          it "MetaData.next_id_for_class" do
+          it "MetaData.next_id_for_class with an instance of user" do
+            MetaData.next_id_for_class( @user ).should == 3
+          end
+          
+          it "MetaData.next_id_for_class with class User" do
+            MetaData.next_id_for_class( User ).should == 3
+          end
+          
+          it "MetaData.next_id_for_class with string 'User'" do
             MetaData.next_id_for_class( "User" ).should == 3
           end
           
