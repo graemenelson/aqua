@@ -59,6 +59,7 @@ module Aqua
           document[:_id] = MetaData.next_id_for_class( document ) unless document[:_id]
           file = self.file_for_document( document )
           ensure_directory( file )
+          add_timestamps( document )
           self._adapter.create_or_update( document, file )
         end
         
@@ -70,6 +71,14 @@ module Aqua
         def self.next_id_for_class( klass )
           key = self.key_from_class( klass )
           self[key].next_id
+        end
+        
+        def self.add_timestamps( document )
+          if document[:created_at].nil?
+            document[:created_at] = Time.now
+          else
+            document[:updated_at] = Time.now
+          end
         end
         
         def self.ensure_directory( file )

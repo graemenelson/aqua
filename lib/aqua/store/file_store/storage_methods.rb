@@ -60,12 +60,12 @@ module Aqua
           #
           # @api public
           def save
-            begin
+            # begin
               create_or_update
-            rescue
-              puts $!
-              return false
-            end
+            # rescue
+            #   puts $!
+            #   return false
+            # end
           end
           
           # Saves an Aqua::Storage to the Aqua::Store::FileStore, will raise an exceptions that may occur.
