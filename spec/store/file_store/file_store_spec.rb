@@ -14,8 +14,10 @@ describe FileStore do
       describe 'with no values' do
         
         before( :each ) do
+          FileUtils.should_receive( :mkdir_p ).with( "#{Dir.pwd}/datastore")
           FileStore.init
         end
+      
         
         it "should set default file adapter" do
           FileStore.adapter.should == "YAMLAdapter"
@@ -30,6 +32,7 @@ describe FileStore do
       describe 'with just adapter set to PStore' do
         
         before( :each ) do
+          FileUtils.should_receive( :mkdir_p ).with( "#{Dir.pwd}/datastore")
           FileStore.init( :adapter => "PStoreAdapter" )
         end
         
@@ -95,8 +98,8 @@ describe FileStore do
       
       describe 'not called' do
 
-        after( :each ) do
-          FileUtils.rm_rf( FileStore.directory )
+        before( :each ) do
+            FileUtils.should_receive( :mkdir_p ).with( "#{Dir.pwd}/datastore")
         end
         
         it "should be Dir.pwd/datastore" do
@@ -108,13 +111,9 @@ describe FileStore do
       describe 'with a valid directory' do
         
         before( :each ) do
+          FileUtils.should_receive( :mkdir_p ).with( "/tmp/datastore")
           FileStore.set_directory( "/tmp" )
         end
-        
-        after( :each ) do
-          FileUtils.rm_rf( FileStore.directory )
-        end
-        
         
         it "should be /tmp/datastore" do
           FileStore.directory.should == "/tmp/datastore"

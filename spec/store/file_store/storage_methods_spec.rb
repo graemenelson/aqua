@@ -3,16 +3,18 @@ require File.dirname(__FILE__) + "/spec_helper"
 describe Aqua::Store::FileStore::StorageMethods do
  
   before( :each ) do
-    # make sure we don't already have a documents directory
-    FileUtils.rm_rf( "#{Aqua::Store::FileStore.directory}/documents" )
     
     # NOTE: this needs be defined here and not outside of the rspec describe block,
     # otherwise we get collisions going on.
     Aqua.set_storage_engine( 'FileStore' ) # to initialize the Aqua::Store namespace
-    Aqua::Store::FileStore.init # init with defaults
+    Aqua::Store::FileStore.init( :directory => SANDBOX_DIR ) # init with defaults
     class Document < Mash 
       include Aqua::Store::FileStore::StorageMethods
     end
+  end
+  
+  after( :each ) do
+    FileUtils.rm_rf( "#{SANDBOX_DIR}/datastore" )
   end
   
   describe 'save' do

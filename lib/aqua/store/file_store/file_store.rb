@@ -105,11 +105,6 @@ module Aqua
         @directory = "#{dir}/datastore"
         FileUtils.mkdir_p( @directory ) unless File.directory?( @directory )
         # TODO: catch FileUtils.mkdir_p exceptions and raise a FileStore exception of some kind.
-        
-        # TODO: load resources and current ids and other startup info here. MetaData??? Not dependent on adapter.
-        # could also call Aqua::Store::FileStore.init or Aqua::Store::FileStore.load to load the resources and
-        # can happen after adapter and directory have been set.
-        
         @directory
       end
       
